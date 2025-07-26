@@ -10,6 +10,7 @@ import {
   Phone,
   Globe,
   LogOut,
+  LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +39,7 @@ export default function Header() {
     { href: "/best-deals", label: "Best Deals" },
     { href: "/best-price", label: "Best Price" },
     { href: "/farm", label: "Contact Us" },
+    { href: "/admin/dashboard", label: "Dashboard" },
   ];
 
   return (
