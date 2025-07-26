@@ -12,7 +12,7 @@ import {
   analyzePrices,
   type PriceAnalysisOutput,
 } from '@/ai/flows/analyze-prices-flow';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, CheckCircle } from 'lucide-react';
 
 export default function PriceAnalysisPage() {
   const [analysis, setAnalysis] = useState<PriceAnalysisOutput | null>(null);
@@ -47,7 +47,7 @@ export default function PriceAnalysisPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-2">AI-Powered Price Analysis</h1>
           <p className="text-lg text-muted-foreground">
-            Our AI assistant helps you find the best value for your money.
+            Our AI assistant helps you find the best value for your money from trusted suppliers.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ export default function PriceAnalysisPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-primary">
               <Sparkles className="w-6 h-6" />
-              Analysis Summary
+              AI Analysis Summary
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -73,47 +73,54 @@ export default function PriceAnalysisPage() {
         </Card>
 
         <div>
-          <h2 className="text-3xl font-bold mb-6">Top Deals</h2>
+          <h2 className="text-3xl font-bold mb-6">Top Recommendations</h2>
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="space-y-2">
-                  <Skeleton className="h-48 w-full" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                 <Card key={i} className="p-4">
+                  <Skeleton className="h-48 w-full mb-4" />
+                  <Skeleton className="h-4 w-3/4 mb-2" />
                   <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-1/2" />
-                </div>
+                  <Skeleton className="h-4 w-1/2 mt-2" />
+                </Card>
               ))}
             </div>
           ) : error ? (
             <div className="text-center py-10">
               <p className="text-destructive mb-4">
-                Could not load top deals.
+                Could not load recommendations.
               </p>
               <Button onClick={() => window.location.reload()}>
                 Try Again
               </Button>
             </div>
           ) : (
-            <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {analysis?.topDeals.map((deal) => {
                 const product = getProductById(deal.productId);
                 if (!product) return null;
                 return (
                   <Card
                     key={deal.productId}
-                    className="flex flex-col md:flex-row items-center gap-6 p-4 hover:shadow-lg transition-shadow"
+                    className="flex flex-col hover:shadow-lg transition-shadow"
                   >
-                    <div className="w-full md:w-1/4 lg:w-1/5">
-                      <ProductCard product={product} />
+                    <div className="p-4">
+                       <ProductCard product={product} />
                     </div>
-                    <div className="flex-grow">
-                      <h3 className="text-xl font-bold mb-2 text-primary">
-                        Why is this a top deal?
+                    <CardContent className="flex-grow p-4 pt-0">
+                       <h3 className="text-lg font-bold mb-2 text-primary">
+                        AI Recommendation
                       </h3>
-                      <p className="text-muted-foreground">
+                      <p className="text-muted-foreground text-sm mb-4">
                         {deal.justification}
                       </p>
-                    </div>
+                      <div className="bg-primary/10 p-3 rounded-md">
+                        <p className="text-sm font-semibold flex items-center gap-2">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                          <span>Best Supplier: <b>{deal.recommendedVendor}</b></span>
+                        </p>
+                      </div>
+                    </CardContent>
                   </Card>
                 );
               })}
@@ -122,7 +129,7 @@ export default function PriceAnalysisPage() {
         </div>
       </main>
       <footer className="w-full py-6 mt-auto text-center text-muted-foreground text-sm bg-muted">
-        <p>© {new Date().getFullYear()} bazar. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} DhojanBazaar. All Rights Reserved.</p>
       </footer>
     </div>
   );

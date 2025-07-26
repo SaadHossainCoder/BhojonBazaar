@@ -51,11 +51,16 @@ const PriceAnalysisOutputSchema = z.object({
         justification: z
           .string()
           .describe(
-            'A short, compelling reason why this product is a top deal.'
+            'A short, compelling reason why this product is a top deal, considering its price, quality (rating), and vendor.'
           ),
+        recommendedVendor: z
+          .string()
+          .describe('The name of the recommended vendor for this product.'),
       })
     )
-    .describe('A list of the top 3-5 products with the best value for money.'),
+    .describe(
+      'A list of the top 3-5 products with the best value for money, recommending the best supplier for each.'
+    ),
 });
 export type PriceAnalysisOutput = z.infer<typeof PriceAnalysisOutputSchema>;
 
@@ -69,19 +74,15 @@ const prompt = ai.definePrompt({
   name: 'analyzePricesPrompt',
   input: { schema: PriceAnalysisInputSchema },
   output: { schema: PriceAnalysisOutputSchema },
-  prompt: `You are a savvy shopping assistant for an online grocery store. Your goal is to help users find the best value for their money by analyzing a list of products.
+  prompt: `You are an expert analyst for "DhojanBazaar", a service for Indian street food vendors. Your goal is to help vendors find the best raw material prices.
 
-Analyze the provided product list, considering the following factors:
-- Price: Lower is generally better.
-- Discounts: Look for products with a significant difference between 'price' and 'originalPrice'.
-- Rating: Higher ratings (closer to 5) indicate better quality.
-- Vendor reputation is not a primary factor, focus on the data.
+Analyze the provided product list. For each category of product (like "Onion", "Tomato", etc.), recommend the best supplier considering both price and quality (rating). A slightly higher price may be acceptable for significantly better quality.
 
-Based on your analysis, provide a concise summary and identify the top 3-5 deals. For each top deal, give a short justification for your choice.
+Based on your analysis, provide a concise summary and identify the top 3-5 deals. For each top deal, give a short justification for your choice and explicitly name the recommended vendor.
 
-Here is the list of products:
+Here is the list of products from various vendors:
 {{#each products}}
-- Product ID: {{id}}, Name: {{name}}, Price: \${{price}}, Original Price: \${{originalPrice}}, Rating: {{rating}}/5
+- Product ID: {{id}}, Name: {{name}}, Price: ₹{{price}}, Quality Rating: {{rating}}/5, Vendor: {{vendor}}
 {{/each}}
 `,
 });
