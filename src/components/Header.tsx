@@ -169,9 +169,6 @@ export default function Header() {
               </Link>
             )}
           </div>
-          <Button variant="ghost" size="icon" className="lg:hidden">
-            <Menu />
-          </Button>
         </div>
       </div>
 
