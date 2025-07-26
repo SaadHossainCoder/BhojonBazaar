@@ -79,14 +79,14 @@ export default function Header() {
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="relative">
               <Heart />
               <Badge className="absolute -top-1 -right-1 h-5 w-5 justify-center p-0">
-                2
+                0
               </Badge>
             </Button>
             <Link href="/cart">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart />
                 {cartItemCount > 0 && (
                   <Badge className="absolute -top-1 -right-1 h-5 w-5 justify-center p-0">
