@@ -16,6 +16,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -42,6 +46,16 @@ export default function ProductDetailPage() {
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
     });
+  };
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Review Submitted",
+      description: "Thank you for your feedback!",
+    });
+    // In a real app, you would handle form submission here
+    (e.target as HTMLFormElement).reset();
   };
 
   return (
@@ -92,7 +106,7 @@ export default function ProductDetailPage() {
                 </span>{" "}
                 {new Date(product.date).toLocaleDateString()}
               </p>
-              <div>
+              <div className="flex items-center gap-2">
                 <span className="font-semibold text-foreground">Category:</span>{" "}
                 <Badge variant="secondary">{product.category}</Badge>
               </div>
@@ -106,6 +120,71 @@ export default function ProductDetailPage() {
               <ShoppingCart className="mr-2" />
               Add to Cart
             </Button>
+          </div>
+        </div>
+
+        <Separator className="my-12" />
+
+        <div className="grid md:grid-cols-2 gap-12">
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Customer Feedback</h2>
+            <div className="space-y-6">
+              {product.feedback?.length > 0 ? (
+                product.feedback.map((fb, index) => (
+                  <Card key={index}>
+                    <CardHeader>
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-lg">{fb.author}</CardTitle>
+                        <div className="flex text-yellow-500">
+                          {[...Array(fb.rating)].map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">{fb.comment}</p>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-muted-foreground">
+                  No feedback for this product yet.
+                </p>
+              )}
+            </div>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Leave a Review</h2>
+            <Card>
+              <CardContent className="pt-6">
+                <form onSubmit={handleReviewSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="review-name">Your Name</Label>
+                    <Input id="review-name" placeholder="John Doe" required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Rating</Label>
+                    <div className="flex gap-1 text-yellow-500 cursor-pointer">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-6 h-6" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="review-comment">Your Review</Label>
+                    <Textarea
+                      id="review-comment"
+                      placeholder="What did you think of the product?"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full">
+                    Submit Review
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>

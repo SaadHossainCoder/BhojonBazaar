@@ -9,6 +9,12 @@ import {
 } from "lucide-react";
 import {FC} from 'react'
 
+export interface Feedback {
+  author: string;
+  rating: number;
+  comment: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -20,6 +26,7 @@ export interface Product {
   hint: string;
   vendor: string;
   date: string;
+  feedback?: Feedback[];
 }
 
 export interface Category {
@@ -50,6 +57,10 @@ export const products: Product[] = [
     hint: "fresh carrots",
     vendor: "FarmFresh Co.",
     date: "2024-07-20",
+    feedback: [
+      { author: "Jane D.", rating: 5, comment: "So fresh and crunchy!" },
+      { author: "John S.", rating: 4, comment: "Great quality for the price." },
+    ],
   },
   {
     id: "prod-2",
@@ -61,6 +72,9 @@ export const products: Product[] = [
     hint: "red tomatoes",
     vendor: "Green Grocers",
     date: "2024-07-21",
+    feedback: [
+      { author: "Alice", rating: 5, comment: "Perfect for salads." },
+    ],
   },
   {
     id: "prod-3",
@@ -85,6 +99,10 @@ export const products: Product[] = [
     hint: "juicy apples",
     vendor: "Orchard Direct",
     date: "2024-07-19",
+    feedback: [
+      { author: "Bob", rating: 5, comment: "My kids love these apples." },
+      { author: "Charlie", rating: 5, comment: "Sweet and crisp, just perfect." },
+    ],
   },
   {
     id: "prod-5",
