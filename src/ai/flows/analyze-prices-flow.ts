@@ -33,7 +33,7 @@ const ProductSchema = z.object({
     .optional(),
 });
 
-export const PriceAnalysisInputSchema = z.object({
+const PriceAnalysisInputSchema = z.object({
   products: z.array(ProductSchema),
 });
 export type PriceAnalysisInput = z.infer<typeof PriceAnalysisInputSchema>;
