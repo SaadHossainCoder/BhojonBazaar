@@ -1,3 +1,9 @@
+
+"use client";
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 import {
   Activity,
   ArrowUpRight,
@@ -45,9 +51,34 @@ import {
 import Link from "next/link"
 import Header from "@/components/Header"
 import Overview from "@/components/dashboard/Overview"
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 export default function Dashboard() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user?.email !== "admin@bhojonbazaar.com") {
+      router.push("/");
+    }
+  }, [user, loading, router]);
+
+  if (loading || user?.email !== "admin@bhojonbazaar.com") {
+    return (
+       <div className="flex min-h-screen w-full flex-col">
+        <Header />
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+            <Skeleton className="h-32 w-full" />
+            <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+              <Skeleton className="h-64 xl:col-span-2" />
+              <Skeleton className="h-64" />
+            </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header />

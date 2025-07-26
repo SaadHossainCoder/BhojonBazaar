@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -34,13 +35,19 @@ export default function Header() {
   const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const pathname = usePathname();
 
+  const isAdmin = user && user.email === "admin@bhojonbazaar.com";
+
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/best-deals", label: "Best Deals" },
     { href: "/best-price", label: "Best Price" },
     { href: "/farm", label: "Contact Us" },
-    { href: "/admin/dashboard", label: "Dashboard" },
   ];
+  
+  if (isAdmin) {
+    navLinks.push({ href: "/admin/dashboard", label: "Dashboard" });
+  }
+
 
   return (
     <header className="bg-card border-b">
