@@ -92,10 +92,10 @@ export default function ProductDetailPage() {
                 </span>{" "}
                 {new Date(product.date).toLocaleDateString()}
               </p>
-              <p>
+              <div>
                 <span className="font-semibold text-foreground">Category:</span>{" "}
                 <Badge variant="secondary">{product.category}</Badge>
-              </p>
+              </div>
             </div>
             <p className="mb-8">
               This is a placeholder description for {product.name}. A more
