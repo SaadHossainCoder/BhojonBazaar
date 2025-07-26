@@ -36,11 +36,8 @@ export default function CartPage() {
       router.push("/login");
     } else {
       // In a real app, you'd process the payment here.
-      toast({
-        title: "Checkout Successful!",
-        description: "Your order has been placed.",
-      });
       clearCart();
+      router.push("/order-success");
     }
   };
 
