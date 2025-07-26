@@ -20,12 +20,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const { id } = params;
   const { addToCart } = useCart();
   const { toast } = useToast();
+
+  const [reviewName, setReviewName] = useState("");
+  const [reviewRating, setReviewRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+
 
   const product = products.find((p) => p.id === id);
 
@@ -50,11 +58,27 @@ export default function ProductDetailPage() {
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+     if (reviewRating === 0) {
+      toast({
+        variant: "destructive",
+        title: "Rating required",
+        description: "Please select a rating before submitting.",
+      });
+      return;
+    }
+    console.log({
+      name: reviewName,
+      rating: reviewRating,
+      comment: reviewComment,
+    });
     toast({
       title: "Review Submitted",
       description: "Thank you for your feedback!",
     });
     // In a real app, you would handle form submission here
+    setReviewName("");
+    setReviewRating(0);
+    setReviewComment("");
     (e.target as HTMLFormElement).reset();
   };
 
@@ -78,10 +102,20 @@ export default function ProductDetailPage() {
             <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
             <div className="flex items-center gap-4 mb-4">
               <div className="flex text-yellow-500">
-                {[...Array(Math.floor(product.rating))].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-current" />
-                ))}
-                {product.rating % 1 !== 0 && <Star className="w-5 h-5" />}
+                {[...Array(5)].map((_, i) => {
+                  const ratingValue = i + 1;
+                  return (
+                     <Star
+                      key={i}
+                      className={cn(
+                        "w-5 h-5",
+                        ratingValue <= product.rating
+                          ? "fill-current"
+                          : "fill-transparent"
+                      )}
+                    />
+                  );
+                 })}
               </div>
               <span className="text-muted-foreground">
                 ({product.rating.toFixed(1)} rating)
@@ -136,8 +170,16 @@ export default function ProductDetailPage() {
                       <div className="flex justify-between items-center">
                         <CardTitle className="text-lg">{fb.author}</CardTitle>
                         <div className="flex text-yellow-500">
-                          {[...Array(fb.rating)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-current" />
+                          {[...Array(5)].map((_, i) => (
+                             <Star
+                              key={i}
+                              className={cn(
+                                "w-4 h-4",
+                                i < fb.rating
+                                  ? "fill-current"
+                                  : "fill-transparent"
+                              )}
+                            />
                           ))}
                         </div>
                       </div>
@@ -161,14 +203,25 @@ export default function ProductDetailPage() {
                 <form onSubmit={handleReviewSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="review-name">Your Name</Label>
-                    <Input id="review-name" placeholder="John Doe" required />
+                    <Input id="review-name" placeholder="John Doe" required 
+                      value={reviewName}
+                      onChange={(e) => setReviewName(e.target.value)}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label>Rating</Label>
-                    <div className="flex gap-1 text-yellow-500 cursor-pointer">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-6 h-6" />
-                      ))}
+                    <div className="flex gap-1 text-yellow-500 cursor-pointer" onMouseLeave={() => setHoverRating(0)}>
+                      {[...Array(5)].map((_, i) => {
+                        const ratingValue = i + 1;
+                        return (
+                          <Star
+                            key={i}
+                            className={cn("w-6 h-6", ratingValue <= (hoverRating || reviewRating) ? 'fill-current' : 'fill-transparent')}
+                            onClick={() => setReviewRating(ratingValue)}
+                            onMouseEnter={() => setHoverRating(ratingValue)}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -177,6 +230,8 @@ export default function ProductDetailPage() {
                       id="review-comment"
                       placeholder="What did you think of the product?"
                       required
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
                     />
                   </div>
                   <Button type="submit" className="w-full">
