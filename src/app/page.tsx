@@ -1,36 +1,48 @@
 "use client";
-import { useContext } from "react";
-import { AppContext } from "@/context/AppContext";
+
+import { useState } from "react";
 import Header from "@/components/Header";
-import VendorCard from "@/components/VendorCard";
-import SubscriptionForm from "@/components/SubscriptionForm";
+import ProductCard from "@/components/ProductCard";
+import CategoryFilter from "@/components/CategoryFilter";
+import { products, categories } from "@/lib/data";
+import type { Category, Product } from "@/lib/data";
 
 export default function Home() {
-  const { vendors } = useContext(AppContext);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    "Accessories"
+  );
+
+  const filteredProducts = products.filter(
+    (product) => product.category === selectedCategory
+  );
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="bg-background">
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold font-headline text-primary mb-2">
-            Daily Market Prices
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Your daily source for essential item prices.
-          </p>
-        </div>
+      <main className="container mx-auto px-4 py-8">
+        <section>
+          <div className="flex items-center mb-6">
+            <span className="w-1 h-7 bg-primary mr-3"></span>
+            <h2 className="text-2xl font-bold">Flash Sales</h2>
+          </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
-          {vendors.map((vendor) => (
-            <VendorCard key={vendor.id} vendor={vendor} />
-          ))}
-        </div>
+          <CategoryFilter
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
 
-        <SubscriptionForm />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-8">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
       </main>
-      <footer className="w-full py-4 text-center text-muted-foreground text-sm">
-        <p>© {new Date().getFullYear()} Daily Market Prices. All Rights Reserved.</p>
+      <footer className="w-full py-6 mt-12 text-center text-muted-foreground text-sm bg-muted">
+        <p>
+          © {new Date().getFullYear()} bazar. All Rights Reserved.
+        </p>
       </footer>
     </div>
   );

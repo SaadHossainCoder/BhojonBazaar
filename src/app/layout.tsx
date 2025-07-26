@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { AppProviders } from "./providers";
-import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Daily Market Prices",
-  description: "Daily prices for essential items for vendors.",
+  title: "bazar - Online Shopping Store",
+  description: "Your one-stop shop for everything.",
 };
 
 export default function RootLayout({
@@ -23,15 +21,12 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased min-h-screen flex flex-col">
-        <AppProviders>
-          <div className="flex-grow">{children}</div>
-          <Toaster />
-        </AppProviders>
+      <body className="font-sans antialiased">
+        {children}
       </body>
     </html>
   );
