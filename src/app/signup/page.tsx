@@ -10,20 +10,21 @@ export default function SignUpPage() {
       <header className="container mx-auto px-4 py-4 flex items-center justify-between gap-4 border-b">
         <Link href="/" className="flex items-center gap-2">
           <svg
+            xmlns="http://www.w3.org/2000/svg"
             width="40"
             height="40"
-            viewBox="0 0 40 40"
+            viewBox="0 0 24 24"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-primary"
           >
-            <path
-              d="M25.76,14.24a5.76,5.76,0,0,1-11.52,0C14.24,8.48,20,2,20,2S25.76,8.48,25.76,14.24Z"
-              fill="#F44336"
-            />
-            <path d="M20 22a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#FFC107" />
-            <path d="M28 30a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#4CAF50" />
+            <path d="M12 2a10 10 0 1 0 10 10H12V2z" />
+            <path d="M12 12a10 10 0 0 1 10-10V12Z" />
           </svg>
-          <span className="text-3xl font-bold text-gray-800">bazar</span>
+          <span className="text-3xl font-bold text-gray-800">BhojonBazaar</span>
         </Link>
         <div className="text-sm">
           <span>Need help? Call us at </span>
@@ -34,7 +35,7 @@ export default function SignUpPage() {
         <SignUpForm />
       </main>
       <footer className="w-full py-6 text-center text-muted-foreground text-sm bg-muted">
-        <p>© {new Date().getFullYear()} bazar. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} BhojonBazaar. All Rights Reserved.</p>
       </footer>
     </div>
   );

@@ -44,7 +44,7 @@ export default function Header() {
     <header className="bg-card border-b">
       <div className="bg-muted text-muted-foreground text-xs">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-          <span>Welcome to bazar Online Grocery Store!</span>
+          <span>Welcome to BhojonBazaar Online Grocery Store!</span>
           <div className="hidden md:flex items-center gap-4">
             <Link href="#" className="hover:text-primary">
               Customer Care
@@ -65,22 +65,25 @@ export default function Header() {
 
       <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <svg
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M25.76,14.24a5.76,5.76,0,0,1-11.52,0C14.24,8.48,20,2,20,2S25.76,8.48,25.76,14.24Z"
-              fill="#4CAF50"
-            />
-            <path d="M20 22a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#FFC107" />
-            <path d="M28 30a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#F44336" />
-          </svg>
-          <Link href="/">
-            <span className="text-3xl font-bold text-gray-800">bazar</span>
+          <Link href="/" className="flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-primary"
+            >
+              <path d="M12 2a10 10 0 1 0 10 10H12V2z" />
+              <path d="M12 12a10 10 0 0 1 10-10V12Z" />
+            </svg>
+            <span className="text-3xl font-bold text-gray-800">
+              BhojonBazaar
+            </span>
           </Link>
         </div>
 

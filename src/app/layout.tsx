@@ -5,7 +5,7 @@ import { CartProvider } from "@/hooks/use-cart";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "bazar - Online Shopping Store",
+  title: "BhojonBazaar - Street Eats Vendor",
   description: "Your one-stop shop for everything.",
 };
 
@@ -23,10 +23,7 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-sans antialiased">
         <AuthProvider>

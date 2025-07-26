@@ -74,7 +74,7 @@ const prompt = ai.definePrompt({
   name: 'analyzePricesPrompt',
   input: { schema: PriceAnalysisInputSchema },
   output: { schema: PriceAnalysisOutputSchema },
-  prompt: `You are an expert analyst for "DhojanBazaar", a service for Indian street food vendors. Your goal is to help vendors find the best raw material prices.
+  prompt: `You are an expert analyst for "BhojonBazaar", a service for street food vendors. Your goal is to help vendors find the best raw material prices.
 
 Analyze the provided product list. For each category of product (like "Onion", "Tomato", etc.), recommend the best supplier considering both price and quality (rating). A slightly higher price may be acceptable for significantly better quality.
 

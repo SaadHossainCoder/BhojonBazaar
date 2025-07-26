@@ -41,7 +41,7 @@ export default function Home() {
       </main>
       <footer className="w-full py-6 mt-12 text-center text-muted-foreground text-sm bg-muted">
         <p>
-          © {new Date().getFullYear()} bazar. All Rights Reserved.
+          © {new Date().getFullYear()} BhojonBazaar. All Rights Reserved.
         </p>
       </footer>
     </div>

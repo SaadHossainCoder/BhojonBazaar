@@ -2,23 +2,26 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  "projectId": "street-eats-vendor-dda0c",
-  "appId": "1:143094775808:web:e471a52ddb31b6beb258e5",
-  "storageBucket": "street-eats-vendor-dda0c.firebasestorage.app",
-  "apiKey": "AIzaSyBQkNGMzHkpBQSlHcH97A1uJ7iaQsmNrZA",
-  "authDomain": "street-eats-vendor-dda0c.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "143094775808"
+  apiKey: "AIzaSyCA_rGJSWFJpBNsTpCV2q97SDK0y20OaA0",
+  authDomain: "bhojonbazaar-3e31d.firebaseapp.com",
+  projectId: "bhojonbazaar-3e31d",
+  storageBucket: "bhojonbazaar-3e31d.firebasestorage.app",
+  messagingSenderId: "654346275257",
+  appId: "1:654346275257:web:b508e366eaaa9241cd4e68",
+  measurementId: "G-JD92CS0NVS"
 };
+
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db };
+// Initialize Analytics
+const analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
+
+export { app, auth, db, analytics };
