@@ -13,13 +13,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/hooks/use-cart";
 
 export default function Header() {
+  const { cart } = useCart();
+  const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
     <header className="bg-card border-b">
       <div className="bg-muted text-muted-foreground text-xs">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-          <span>Welcome to bazar Online Shopping Store!</span>
+          <span>Welcome to bazar Online Grocery Store!</span>
           <div className="hidden md:flex items-center gap-4">
             <Link href="#" className="hover:text-primary">
               Customer Care
@@ -49,10 +53,10 @@ export default function Header() {
           >
             <path
               d="M25.76,14.24a5.76,5.76,0,0,1-11.52,0C14.24,8.48,20,2,20,2S25.76,8.48,25.76,14.24Z"
-              fill="#F44336"
+              fill="#4CAF50"
             />
             <path d="M20 22a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#FFC107" />
-            <path d="M28 30a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#4CAF50" />
+            <path d="M28 30a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#F44336" />
           </svg>
           <span className="text-3xl font-bold text-gray-800">bazar</span>
         </div>
@@ -81,12 +85,16 @@ export default function Header() {
                 2
               </Badge>
             </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingCart />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 justify-center p-0">
-                1
-              </Badge>
-            </Button>
+            <Link href="/cart">
+              <Button variant="ghost" size="icon">
+                <ShoppingCart />
+                {cartItemCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 justify-center p-0">
+                    {cartItemCount}
+                  </Badge>
+                )}
+              </Button>
+            </Link>
             <Link href="/login">
                <Button variant="ghost" size="sm" className="gap-2">
                 <User />

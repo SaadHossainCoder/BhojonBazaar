@@ -9,12 +9,12 @@ import type { Category, Product } from "@/lib/data";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    "Accessories"
+    "Vegetables"
   );
 
-  const filteredProducts = products.filter(
-    (product) => product.category === selectedCategory
-  );
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
 
   return (
     <div className="bg-background">
@@ -23,7 +23,7 @@ export default function Home() {
         <section>
           <div className="flex items-center mb-6">
             <span className="w-1 h-7 bg-primary mr-3"></span>
-            <h2 className="text-2xl font-bold">Flash Sales</h2>
+            <h2 className="text-2xl font-bold">Today's Deals</h2>
           </div>
 
           <CategoryFilter

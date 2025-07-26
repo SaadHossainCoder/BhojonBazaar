@@ -1,11 +1,10 @@
 import {
-  Heart,
-  Home,
-  Watch,
-  Shirt,
-  ShoppingBag,
-  Briefcase,
-  Dumbbell,
+  Carrot,
+  Apple,
+  Milk,
+  Cookie,
+  Beef,
+  Flame,
   ComponentType,
 } from "lucide-react";
 import {FC} from 'react'
@@ -14,7 +13,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
-  originalPrice: number;
+  originalPrice?: number;
   rating: number;
   imageUrl: string;
   category: string;
@@ -28,114 +27,112 @@ export interface Category {
 }
 
 export const categories: Category[] = [
-  { id: "cat-1", name: "Health & Beauty", icon: Heart },
-  { id: "cat-2", name: "Home & Garden", icon: Home },
-  { id: "cat-3", name: "Accessories", icon: Watch },
-  { id: "cat-4", name: "Women's Clothing", icon: Shirt },
-  { id: "cat-5", name: "Shoes & Bags", icon: ShoppingBag },
-  { id: "cat-6", name: "Men's Clothing", icon: Briefcase },
-  { id: "cat-7", name: "Sports", icon: Dumbbell },
+  { id: "cat-1", name: "Vegetables", icon: Carrot },
+  { id: "cat-2", name: "Fruits", icon: Apple },
+  { id: "cat-3", name: "Dairy", icon: Milk },
+  { id: "cat-4", name: "Bakery", icon: Cookie },
+  { id: "cat-5", name: "Meat", icon: Beef },
+  { id: "cat-6", name: "Pantry", icon: Flame },
 ];
 
 export const products: Product[] = [
+  // Vegetables
   {
     id: "prod-1",
-    name: "J9 Speakers",
-    price: 97.0,
-    originalPrice: 156.0,
-    rating: 4.5,
+    name: "Organic Carrots",
+    price: 2.5,
+    originalPrice: 3.0,
+    rating: 4.8,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Accessories",
-    hint: "black speaker"
+    category: "Vegetables",
+    hint: "fresh carrots",
   },
   {
     id: "prod-2",
-    name: "Scented Soap",
-    price: 97.0,
-    originalPrice: 156.0,
-    rating: 4.5,
+    name: "Fresh Tomatoes",
+    price: 3.0,
+    rating: 4.7,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Health & Beauty",
-    hint: "scented soap"
+    category: "Vegetables",
+    hint: "red tomatoes",
   },
   {
     id: "prod-3",
-    name: "Summer Shorts",
-    price: 97.0,
-    originalPrice: 156.0,
-    rating: 4.5,
+    name: "Spinach Bunch",
+    price: 2.0,
+    originalPrice: 2.5,
+    rating: 4.9,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Women's Clothing",
-    hint: "denim shorts"
+    category: "Vegetables",
+    hint: "green spinach",
   },
+  // Fruits
   {
     id: "prod-4",
-    name: "Skipping Rope",
-    price: 97.0,
-    originalPrice: 156.0,
-    rating: 4.5,
+    name: "Red Apples",
+    price: 4.0,
+    rating: 4.9,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Sports",
-    hint: "skipping rope"
+    category: "Fruits",
+    hint: "juicy apples",
   },
   {
     id: "prod-5",
-    name: "Green Chair",
-    price: 97.0,
-    originalPrice: 156.0,
-    rating: 4.5,
+    name: "Bananas",
+    price: 1.5,
+    rating: 4.6,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Home & Garden",
-    hint: "green chair"
+    category: "Fruits",
+    hint: "ripe bananas",
   },
+  // Dairy
   {
     id: "prod-6",
-    name: "Lipstick",
-    price: 45.0,
-    originalPrice: 60.0,
+    name: "Organic Milk",
+    price: 3.5,
     rating: 4.8,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Health & Beauty",
-    hint: "red lipstick"
+    category: "Dairy",
+    hint: "fresh milk",
   },
   {
     id: "prod-7",
-    name: "Pearl Earrings",
-    price: 120.0,
-    originalPrice: 180.0,
-    rating: 4.9,
-    imageUrl: "https://placehold.co/300x300.png",
-    category: "Accessories",
-    hint: "pearl earrings"
-  },
-  {
-    id: "prod-8",
-    name: "House Plant",
-    price: 35.0,
-    originalPrice: 50.0,
+    name: "Cheddar Cheese",
+    price: 5.0,
+    originalPrice: 6.0,
     rating: 4.7,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Home & Garden",
-    hint: "house plant"
+    category: "Dairy",
+    hint: "block cheese",
   },
+  // Bakery
+  {
+    id: "prod-8",
+    name: "Sourdough Bread",
+    price: 4.5,
+    rating: 4.9,
+    imageUrl: "https://placehold.co/300x300.png",
+    category: "Bakery",
+    hint: "artisan bread",
+  },
+  // Meat
   {
     id: "prod-9",
-    name: "Vacuum Cleaner",
-    price: 199.0,
-    originalPrice: 250.0,
-    rating: 4.6,
-    imageUrl: "https://placehold.co/300x300.png",
-    category: "Home & Garden",
-    hint: "vacuum cleaner"
-  },
-  {
-    id: "prod-10",
-    name: "Leather Shoes",
-    price: 150.0,
-    originalPrice: 200.0,
+    name: "Chicken Breast",
+    price: 8.0,
     rating: 4.8,
     imageUrl: "https://placehold.co/300x300.png",
-    category: "Men's Clothing",
-    hint: "leather shoes"
+    category: "Meat",
+    hint: "raw chicken",
+  },
+  // Pantry
+  {
+    id: "prod-10",
+    name: "Olive Oil",
+    price: 10.0,
+    rating: 4.9,
+    imageUrl: "https://placehold.co/300x300.png",
+    category: "Pantry",
+    hint: "olive oil",
   },
 ];
