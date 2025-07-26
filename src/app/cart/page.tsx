@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
@@ -16,7 +19,10 @@ import {
 } from "@/components/ui/card";
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateQuantity } = useCart();
+  const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
 
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -24,6 +30,19 @@ export default function CartPage() {
   );
   const shipping = 5.0; // Flat rate shipping
   const total = subtotal + shipping;
+
+  const handleCheckout = () => {
+    if (!user) {
+      router.push("/login");
+    } else {
+      // In a real app, you'd process the payment here.
+      toast({
+        title: "Checkout Successful!",
+        description: "Your order has been placed.",
+      });
+      clearCart();
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -104,7 +123,9 @@ export default function CartPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">Proceed to Checkout</Button>
+                  <Button className="w-full" onClick={handleCheckout}>
+                    Proceed to Checkout
+                  </Button>
                 </CardFooter>
               </Card>
             </div>
