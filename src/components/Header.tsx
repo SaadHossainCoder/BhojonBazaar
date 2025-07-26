@@ -37,7 +37,7 @@ export default function Header() {
     { href: "/", label: "Home" },
     { href: "/best-deals", label: "Best Deals" },
     { href: "/best-price", label: "Best Price" },
-    { href: "/farm", label: "Help" },
+    { href: "/farm", label: "Contact Us" },
   ];
 
   return (
@@ -183,10 +183,6 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-          <div className="flex items-center gap-2 text-sm">
-            <Phone className="w-5 h-5" />
-            <span>Hotline: 046582</span>
-          </div>
         </div>
       </div>
     </header>
