@@ -87,13 +87,15 @@ export default function Header() {
                 1
               </Badge>
             </Button>
-            <Button variant="ghost" size="sm" className="gap-2">
-              <User />
-              <div>
-                <p className="text-xs">Login</p>
-                <p className="text-xs font-semibold">Register</p>
-              </div>
-            </Button>
+            <Link href="/login">
+               <Button variant="ghost" size="sm" className="gap-2">
+                <User />
+                <div>
+                  <p className="text-xs">Login</p>
+                  <p className="text-xs font-semibold">Register</p>
+                </div>
+              </Button>
+            </Link>
           </div>
           <Button variant="ghost" size="icon" className="lg:hidden">
             <Menu />
