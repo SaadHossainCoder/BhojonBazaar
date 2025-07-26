@@ -64,7 +64,7 @@ export default function Header() {
     <header className="bg-card border-b">
       <div className="bg-muted text-muted-foreground text-xs">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-          <span>Welcome to BhojonBazaar Online Grocery Store!</span>
+          <span>Welcome to BhojonBazaar Online Store!</span>
           <div className="hidden md:flex items-center gap-4">
             <Link href="#" className="hover:text-primary">
               Customer Care
