@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Star, ShoppingCart } from "lucide-react";
 import { products } from "@/lib/data";
+import type { Feedback } from "@/lib/data";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
@@ -29,13 +30,14 @@ export default function ProductDetailPage() {
   const { addToCart } = useCart();
   const { toast } = useToast();
 
+  const product = products.find((p) => p.id === id);
+  
+  const [feedback, setFeedback] = useState<Feedback[]>(product?.feedback || []);
   const [reviewName, setReviewName] = useState("");
   const [reviewRating, setReviewRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewComment, setReviewComment] = useState("");
 
-
-  const product = products.find((p) => p.id === id);
 
   if (!product) {
     return (
@@ -66,16 +68,20 @@ export default function ProductDetailPage() {
       });
       return;
     }
-    console.log({
-      name: reviewName,
+
+    const newFeedback: Feedback = {
+      author: reviewName,
       rating: reviewRating,
       comment: reviewComment,
-    });
+    };
+
+    setFeedback(prevFeedback => [newFeedback, ...prevFeedback]);
+
     toast({
       title: "Review Submitted",
       description: "Thank you for your feedback!",
     });
-    // In a real app, you would handle form submission here
+    
     setReviewName("");
     setReviewRating(0);
     setReviewComment("");
@@ -163,8 +169,8 @@ export default function ProductDetailPage() {
           <div>
             <h2 className="text-2xl font-bold mb-6">Customer Feedback</h2>
             <div className="space-y-6">
-              {product.feedback?.length > 0 ? (
-                product.feedback.map((fb, index) => (
+              {feedback.length > 0 ? (
+                feedback.map((fb, index) => (
                   <Card key={index}>
                     <CardHeader>
                       <div className="flex justify-between items-center">
