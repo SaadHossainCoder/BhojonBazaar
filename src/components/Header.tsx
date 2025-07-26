@@ -25,7 +25,7 @@ export default function Header() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/best-deals", label: "Best Deals" },
-    { href: "/farm", label: "Farm" },
+    { href: "/farm", label: "Help" },
   ];
 
   return (
@@ -40,7 +40,7 @@ export default function Header() {
             <Link href="#" className="hover:text-primary">
               Track Order
             </Link>
-            <Link href="#" className="hover:text-primary">
+            <Link href="/farm" className="hover:text-primary">
               Help
             </Link>
             <Button variant="ghost" size="sm" className="gap-1 text-xs">
