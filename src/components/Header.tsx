@@ -14,10 +14,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function Header() {
   const { cart } = useCart();
   const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const pathname = usePathname();
+
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/best-deals", label: "Best Deals" },
+    { href: "/farm", label: "Farm" },
+  ];
 
   return (
     <header className="bg-card border-b">
@@ -58,7 +67,9 @@ export default function Header() {
             <path d="M20 22a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#FFC107" />
             <path d="M28 30a8 8 0 1 0-8 8 8 8 0 0 0 8-8z" fill="#F44336" />
           </svg>
-          <span className="text-3xl font-bold text-gray-800">bazar</span>
+          <Link href="/">
+            <span className="text-3xl font-bold text-gray-800">bazar</span>
+          </Link>
         </div>
 
         <div className="hidden lg:flex flex-grow max-w-lg">
@@ -114,42 +125,18 @@ export default function Header() {
       <div className="border-t hidden md:block">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <nav className="flex gap-6">
-            <Link
-              href="#"
-              className="py-3 text-sm font-medium hover:text-primary"
-            >
-              Home
-            </Link>
-            <Link
-              href="#"
-              className="py-3 text-sm font-medium hover:text-primary"
-            >
-              Shop
-            </Link>
-            <Link
-              href="#"
-              className="py-3 text-sm font-medium hover:text-primary"
-            >
-              Pages
-            </Link>
-            <Link
-              href="#"
-              className="py-3 text-sm font-medium hover:text-primary"
-            >
-              Blog
-            </Link>
-            <Link
-              href="#"
-              className="py-3 text-sm font-medium text-primary border-b-2 border-primary"
-            >
-              Daily Deals
-            </Link>
-            <Link
-              href="#"
-              className="py-3 text-sm font-medium hover:text-primary"
-            >
-              Discount
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "py-3 text-sm font-medium hover:text-primary",
+                  pathname === link.href && "text-primary border-b-2 border-primary"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
           <div className="flex items-center gap-2 text-sm">
             <Phone className="w-5 h-5" />
