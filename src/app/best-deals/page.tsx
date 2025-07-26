@@ -1,10 +1,10 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
-import { products, vendors, Vendor } from "@/lib/data";
+import { vendors, Vendor } from "@/lib/data";
 import type { Product } from "@/lib/data";
 import {
   Accordion,
@@ -15,6 +15,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { MapPin, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { db } from "@/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 type VendorWithDistance = Vendor & { distance: number };
 
@@ -22,6 +24,26 @@ export default function BestDealsPage() {
   const { toast } = useToast();
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [nearbyVendors, setNearbyVendors] = useState<VendorWithDistance[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoadingProducts(true);
+      try {
+        const productsCollection = collection(db, 'products');
+        const productSnapshot = await getDocs(productsCollection);
+        const productList = productSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
+        setProducts(productList);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // Group products by vendor
   const productsByVendor = products.reduce((acc, product) => {
@@ -137,30 +159,37 @@ export default function BestDealsPage() {
         )}
 
         <Accordion type="multiple" className="w-full">
-          {vendorsToShow.map((vendorName) => {
-            const vendorDetails = nearbyVendors.find(v => v.name === vendorName);
-            return (
-              <AccordionItem key={vendorName} value={vendorName}>
-                <AccordionTrigger className="text-2xl font-semibold py-4">
-                  <div className="flex justify-between w-full items-center pr-4">
-                    <span>{vendorName}</span>
-                    {vendorDetails && (
-                      <span className="text-sm font-normal text-muted-foreground bg-secondary px-2 py-1 rounded-md">
-                        ~{vendorDetails.distance.toFixed(1)} km away
-                      </span>
-                    )}
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-4">
-                    {(productsByVendor[vendorName] || []).map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            )
-          })}
+          {loadingProducts ? (
+            <div className="text-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p>Loading Products...</p>
+            </div>
+          ) : (
+            vendorsToShow.map((vendorName) => {
+              const vendorDetails = nearbyVendors.find(v => v.name === vendorName);
+              return (
+                <AccordionItem key={vendorName} value={vendorName}>
+                  <AccordionTrigger className="text-2xl font-semibold py-4">
+                    <div className="flex justify-between w-full items-center pr-4">
+                      <span>{vendorName}</span>
+                      {vendorDetails && (
+                        <span className="text-sm font-normal text-muted-foreground bg-secondary px-2 py-1 rounded-md">
+                          ~{vendorDetails.distance.toFixed(1)} km away
+                        </span>
+                      )}
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-4">
+                      {(productsByVendor[vendorName] || []).map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              )
+            })
+          )}
         </Accordion>
       </main>
       <footer className="w-full py-6 mt-auto text-center text-muted-foreground text-sm bg-muted">

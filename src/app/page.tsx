@@ -1,16 +1,40 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import CategoryFilter from "@/components/CategoryFilter";
-import { products, categories } from "@/lib/data";
-import type { Category, Product } from "@/lib/data";
+import { categories } from "@/lib/data";
+import type { Product } from "@/lib/data";
+import { db } from "@/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     "Vegetables"
   );
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const productsCollection = collection(db, 'products');
+        const productSnapshot = await getDocs(productsCollection);
+        const productList = productSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
+        setProducts(productList);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)
@@ -33,9 +57,15 @@ export default function Home() {
           />
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-8">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+             {loading ? (
+              [...Array(5)].map((_, i) => (
+                <CardSkeleton key={i} />
+              ))
+            ) : (
+              filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            )}
           </div>
         </section>
       </main>
@@ -46,4 +76,16 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+const CardSkeleton = () => {
+  return (
+    <div className="flex flex-col space-y-3">
+      <Skeleton className="h-[125px] w-full rounded-xl" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-3/4" />
+      </div>
+    </div>
+  )
 }

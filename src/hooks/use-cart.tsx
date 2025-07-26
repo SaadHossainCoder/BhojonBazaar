@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -10,7 +11,7 @@ import {
 import type { Product } from "@/lib/data";
 import { useAuth } from "./use-auth";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, setDoc, onSnapshot, getDocs, collection, writeBatch, query, where } from "firebase/firestore";
 
 export interface CartItem extends Product {
   quantity: number;
@@ -54,9 +55,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const cartRef = doc(db, "carts", user.uid);
       const unsubscribe = onSnapshot(
         cartRef,
-        (docSnap) => {
+        async (docSnap) => {
           if (docSnap.exists()) {
-            const firestoreCart = docSnap.data().items || [];
+            const firestoreCartItems = docSnap.data().items || [];
+            
+            const productIds = firestoreCartItems.map((item: { id: string, quantity: number }) => item.id);
+            let productsData: Product[] = [];
+
+            if (productIds.length > 0) {
+              const productsRef = collection(db, "products");
+              const q = query(productsRef, where("__name__", "in", productIds));
+              const querySnapshot = await getDocs(q);
+              productsData = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
+            }
+
+            const firestoreCart = firestoreCartItems.map((item: { id: string, quantity: number }) => {
+              const productData = productsData.find(p => p.id === item.id);
+              return { ...productData, ...item };
+            });
+
             // Merge local cart with Firestore cart on login
             if (localCart.length > 0) {
               const mergedCart = [...firestoreCart];
@@ -71,7 +88,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 }
               });
               setCart(mergedCart);
-              setDoc(cartRef, { items: mergedCart }, { merge: true });
+              const itemsToStore = mergedCart.map(({id, quantity}) => ({id, quantity}))
+              await setDoc(cartRef, { items: itemsToStore }, { merge: true });
               setLocalCart([]); // Clear local cart after merging
               localStorage.removeItem("cart");
             } else {
@@ -80,7 +98,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           } else if (localCart.length > 0) {
             // New user with a local cart
             setCart(localCart);
-            setDoc(cartRef, { items: localCart });
+            const itemsToStore = localCart.map(({id, quantity}) => ({id, quantity}))
+            await setDoc(cartRef, { items: itemsToStore });
             setLocalCart([]);
             localStorage.removeItem("cart");
           } else {
@@ -99,17 +118,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       // User is logged out, use local cart
       setCart(localCart);
     }
-  }, [user, localCart]);
+  }, [user]);
 
   // Effect to update Firestore or Local Storage when cart changes
   useEffect(() => {
     const updateDataSource = async () => {
-      if (user) {
-        if (!loading) { // Avoid writing incomplete data on initial load
-          const cartRef = doc(db, "carts", user.uid);
-          await setDoc(cartRef, { items: cart });
-        }
-      } else {
+       if (user && !loading) {
+        const cartRef = doc(db, "carts", user.uid);
+        const itemsToStore = cart.map(({id, quantity}) => ({id, quantity}));
+        await setDoc(cartRef, { items: itemsToStore });
+      } else if (!user) {
         localStorage.setItem("cart", JSON.stringify(cart));
       }
     };
