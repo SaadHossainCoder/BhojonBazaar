@@ -1,10 +1,6 @@
 import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
-import {defineDotenv} from 'genkit';
-
-defineDotenv({
-  experimentalAllowUnsafeGet: true,
-});
+import 'dotenv/config';
 
 export const ai = genkit({
   plugins: [
