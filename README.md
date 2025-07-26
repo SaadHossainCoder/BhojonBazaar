@@ -1,5 +1,7 @@
 # BhojonBazaar - AI-Powered Grocery Marketplace
 
+> **Note:** This project was developed as part of the **Tutedude’s Web Development Hackathon 1.0 – Solving for Street Food**.
+
 Welcome to BhojonBazaar, a modern, feature-rich e-commerce application designed for street food vendors and small businesses to source the best raw materials at competitive prices. This project showcases a full-stack implementation using a modern web stack and integrates cutting-edge AI to provide intelligent insights.
 
 ## ✨ Key Features
@@ -15,41 +17,16 @@ Welcome to BhojonBazaar, a modern, feature-rich e-commerce application designed 
 
 ## 🚀 Tech Stack
 
-- **Framework:** [Next.js](https://nextjs.org/) (with App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components:** [ShadCN](https://ui.shadcn.com/)
-- **Authentication & Database:** [Firebase](https://firebase.google.com/)
-- **Generative AI:** [Genkit](https://firebase.google.com/docs/genkit)
+- **Framework:** [Next.js]
+- **Language:** [TypeScript]
+- **Styling:** [Tailwind CSS]
+- **UI Components:** [ShadCN]
+- **Authentication & Database:** [Firebase]
+- **Generative AI:** [Genkit]
 
 ## Getting Started
 
 To get a local copy up and running, follow these simple steps.
-
-### Prerequisites
-
-- Node.js (v18 or later)
-- npm or yarn
-
-### Installation
-
-1.  **Clone the repo**
-    ```sh
-    git clone https://github.com/your_username_/BhojonBazaar.git
-    ```
-2.  **Install NPM packages**
-    ```sh
-    npm install
-    ```
-3.  **Set up environment variables**
-    Create a `.env` file in the root of the project and add your Firebase API keys.
-
-4.  **Run the development server**
-    ```sh
-    npm run dev
-    ```
-
-The application will be available at `http://localhost:3000`.
 
 ### 🔑 Admin Access
 
