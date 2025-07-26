@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from 'next/link';
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -16,7 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export default function LoginForm() {
+export default function SignUpForm() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,21 +27,25 @@ export default function LoginForm() {
     e.preventDefault();
     setError("");
 
-    // Hardcoded credentials
-    if (email === "admin" && password === "password123") {
-      // In a real app, you'd set a session/token here
-      router.push("/");
-    } else {
-      setError("Invalid username or password.");
+    // Basic validation
+    if (!name || !email || !password) {
+      setError("Please fill in all fields.");
+      return;
     }
+
+    // In a real app, you would handle user creation here
+    console.log("Creating user:", { name, email });
+
+    // Redirect to home page on successful (mock) signup
+    router.push("/");
   };
 
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Welcome Back!</CardTitle>
+        <CardTitle className="text-2xl">Create an Account</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account.
+          Enter your details below to create your account.
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -51,11 +56,22 @@ export default function LoginForm() {
             </Alert>
           )}
           <div className="grid gap-2">
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              type="text"
-              placeholder="admin"
+              type="email"
+              placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -66,7 +82,6 @@ export default function LoginForm() {
             <Input
               id="password"
               type="password"
-              placeholder="password123"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -75,12 +90,12 @@ export default function LoginForm() {
         </CardContent>
         <CardFooter className="flex flex-col">
           <Button className="w-full" type="submit">
-            Sign in
+            Create Account
           </Button>
           <p className="mt-4 text-xs text-center text-muted-foreground">
-            Don't have an account?{" "}
-            <Link href="/signup" className="underline">
-              Sign up
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Sign in
             </Link>
           </p>
         </CardFooter>
