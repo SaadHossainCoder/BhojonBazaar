@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import { useAuth } from "@/hooks/use-auth";
 import {
   Card,
   CardContent,
@@ -15,23 +16,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { signIn } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    // Hardcoded credentials
-    if (email === "admin" && password === "password123") {
-      // In a real app, you'd set a session/token here
+    try {
+      await signIn(email, password);
       router.push("/");
-    } else {
-      setError("Invalid username or password.");
+    } catch (err: any) {
+      setError(err.message || "An unknown error occurred.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,11 +60,12 @@ export default function LoginForm() {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              type="text"
-              placeholder="admin"
+              type="email"
+              placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           <div className="grid gap-2">
@@ -66,15 +73,17 @@ export default function LoginForm() {
             <Input
               id="password"
               type="password"
-              placeholder="password123"
+              placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col">
-          <Button className="w-full" type="submit">
+          <Button className="w-full" type="submit" disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign in
           </Button>
           <p className="mt-4 text-xs text-center text-muted-foreground">

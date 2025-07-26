@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Card,
   CardContent,
@@ -15,29 +16,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
 
 export default function SignUpForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { signUp } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    // Basic validation
-    if (!name || !email || !password) {
-      setError("Please fill in all fields.");
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      setLoading(false);
       return;
     }
 
-    // In a real app, you would handle user creation here
-    console.log("Creating user:", { name, email });
-
-    // Redirect to home page on successful (mock) signup
-    router.push("/");
+    try {
+      await signUp(email, password, name);
+      router.push("/");
+    } catch (err: any) {
+      setError(err.message || "An unknown error occurred during sign up.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,6 +72,7 @@ export default function SignUpForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           <div className="grid gap-2">
@@ -75,6 +84,7 @@ export default function SignUpForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           <div className="grid gap-2">
@@ -85,11 +95,13 @@ export default function SignUpForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col">
-          <Button className="w-full" type="submit">
+          <Button className="w-full" type="submit" disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Account
           </Button>
           <p className="mt-4 text-xs text-center text-muted-foreground">

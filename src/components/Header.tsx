@@ -9,16 +9,27 @@ import {
   Menu,
   Phone,
   Globe,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Header() {
   const { cart } = useCart();
+  const { user, signOut } = useAuth();
   const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const pathname = usePathname();
 
@@ -107,15 +118,44 @@ export default function Header() {
                 )}
               </Button>
             </Link>
-            <Link href="/login">
-               <Button variant="ghost" size="sm" className="gap-2">
-                <User />
-                <div>
-                  <p className="text-xs">Login</p>
-                  <p className="text-xs font-semibold">Register</p>
-                </div>
-              </Button>
-            </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <User />
+                    <div>
+                      <p className="text-xs text-left">
+                        {user.displayName || "My Account"}
+                      </p>
+                      <p className="text-xs font-semibold">
+                        {user.email?.split("@")[0]}
+                      </p>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Orders</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <User />
+                  <div>
+                    <p className="text-xs">Login</p>
+                    <p className="text-xs font-semibold">Register</p>
+                  </div>
+                </Button>
+              </Link>
+            )}
           </div>
           <Button variant="ghost" size="icon" className="lg:hidden">
             <Menu />
@@ -132,7 +172,8 @@ export default function Header() {
                 href={link.href}
                 className={cn(
                   "py-3 text-sm font-medium hover:text-primary",
-                  pathname === link.href && "text-primary border-b-2 border-primary"
+                  pathname === link.href &&
+                    "text-primary border-b-2 border-primary"
                 )}
               >
                 {link.label}
