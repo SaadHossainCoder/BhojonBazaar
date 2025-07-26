@@ -138,7 +138,7 @@ export default function ContactPage() {
         </div>
       </main>
       <footer className="w-full py-6 mt-auto text-center text-muted-foreground text-sm bg-muted">
-        <p>© {new Date().getFullYear()} BhojonBazaar. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} BhojonBazaar</p>
       </footer>
     </div>
   );

@@ -52,7 +52,7 @@ export const products: Product[] = [
     price: 2.5,
     originalPrice: 3.0,
     rating: 4.8,
-    imageUrl: "https://placehold.co/300x300.png",
+    imageUrl: "https://www.greendna.in/cdn/shop/products/basket-carrots-close-up-37641_1024x1024@2x.jpg?v=1632668896",
     category: "Vegetables",
     hint: "fresh carrots",
     vendor: "FarmFresh Co.",
