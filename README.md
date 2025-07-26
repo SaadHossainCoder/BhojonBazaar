@@ -50,3 +50,13 @@ To get a local copy up and running, follow these simple steps.
     ```
 
 The application will be available at `http://localhost:3000`.
+
+### 🔑 Admin Access
+
+To access the administrative dashboard, you need to create an admin account.
+
+1.  Navigate to the **Sign Up** page.
+2.  Register a new user with the following email:
+    -   **Email:** `admin@bhojonbazaar.com`
+3.  You can use **any password** you like.
+4.  Once registered, log in with these credentials to access the "Dashboard" link in the navigation bar.
