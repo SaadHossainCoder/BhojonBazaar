@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Star, ShoppingCart } from "lucide-react";
 import type { Product } from "@/lib/data";
 import {
@@ -19,7 +20,9 @@ export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
   const { toast } = useToast();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     addToCart(product);
     toast({
       title: "Added to cart",
@@ -28,50 +31,56 @@ export default function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <Card className="group overflow-hidden border-0 shadow-none hover:shadow-lg transition-shadow duration-300 flex flex-col">
-      <CardHeader className="p-0 bg-muted relative">
-        <div className="relative w-full aspect-square">
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            fill
-            className="object-cover"
-            data-ai-hint={product.hint}
-          />
-        </div>
-        <Button
-          size="sm"
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={handleAddToCart}
-        >
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Add to Cart
-        </Button>
-      </CardHeader>
-      <CardContent className="p-4 text-center flex-grow">
-        <CardTitle className="text-sm font-medium truncate">
-          {product.name}
-        </CardTitle>
-        <div className="flex justify-center items-center gap-2 mt-2">
-          <span className="font-bold text-primary">
-            ${product.price.toFixed(2)}
-          </span>
-          {product.originalPrice && (
-            <span className="text-sm text-muted-foreground line-through">
-              ${product.originalPrice.toFixed(2)}
-            </span>
-          )}
-        </div>
-        <div className="flex justify-center items-center gap-1 mt-2 text-xs text-muted-foreground">
-          <div className="flex text-yellow-500">
-            {[...Array(Math.floor(product.rating))].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-current" />
-            ))}
-            {product.rating % 1 !== 0 && <Star className="w-4 h-4" />}
+    <Link href={`/product/${product.id}`} className="block">
+      <Card className="group overflow-hidden border-0 shadow-none hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
+        <CardHeader className="p-0 bg-muted relative">
+          <div className="relative w-full aspect-square">
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              fill
+              className="object-cover"
+              data-ai-hint={product.hint}
+            />
           </div>
-          <span>({product.rating.toFixed(1)})</span>
-        </div>
-      </CardContent>
-    </Card>
+          <Button
+            size="sm"
+            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={handleAddToCart}
+          >
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            Add to Cart
+          </Button>
+        </CardHeader>
+        <CardContent className="p-4 text-center flex-grow flex flex-col justify-between">
+          <div>
+            <CardTitle className="text-sm font-medium truncate">
+              {product.name}
+            </CardTitle>
+          </div>
+          <div>
+            <div className="flex justify-center items-center gap-2 mt-2">
+              <span className="font-bold text-primary">
+                ${product.price.toFixed(2)}
+              </span>
+              {product.originalPrice && (
+                <span className="text-sm text-muted-foreground line-through">
+                  ${product.originalPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
+            <div className="flex justify-center items-center gap-1 mt-2 text-xs text-muted-foreground">
+              <div className="flex text-yellow-500">
+                {[...Array(Math.floor(product.rating))].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+                {product.rating % 1 !== 0 && <Star className="w-4 h-4" />}
+              </div>
+              <span>({product.rating.toFixed(1)})</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }

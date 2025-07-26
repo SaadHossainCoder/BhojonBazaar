@@ -18,6 +18,8 @@ export interface Product {
   imageUrl: string;
   category: string;
   hint: string;
+  vendor: string;
+  date: string;
 }
 
 export interface Category {
@@ -46,6 +48,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Vegetables",
     hint: "fresh carrots",
+    vendor: "FarmFresh Co.",
+    date: "2024-07-20",
   },
   {
     id: "prod-2",
@@ -55,6 +59,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Vegetables",
     hint: "red tomatoes",
+    vendor: "Green Grocers",
+    date: "2024-07-21",
   },
   {
     id: "prod-3",
@@ -65,6 +71,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Vegetables",
     hint: "green spinach",
+    vendor: "FarmFresh Co.",
+    date: "2024-07-22",
   },
   // Fruits
   {
@@ -75,6 +83,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Fruits",
     hint: "juicy apples",
+    vendor: "Orchard Direct",
+    date: "2024-07-19",
   },
   {
     id: "prod-5",
@@ -84,6 +94,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Fruits",
     hint: "ripe bananas",
+    vendor: "Tropical Fruits",
+    date: "2024-07-18",
   },
   // Dairy
   {
@@ -94,6 +106,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Dairy",
     hint: "fresh milk",
+    vendor: "Happy Cow Dairy",
+    date: "2024-07-25",
   },
   {
     id: "prod-7",
@@ -104,6 +118,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Dairy",
     hint: "block cheese",
+    vendor: "The Cheese Makers",
+    date: "2024-08-10",
   },
   // Bakery
   {
@@ -114,6 +130,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Bakery",
     hint: "artisan bread",
+    vendor: "The Bread Kiln",
+    date: "2024-07-22",
   },
   // Meat
   {
@@ -124,6 +142,8 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Meat",
     hint: "raw chicken",
+    vendor: "Free-Range Farms",
+    date: "2024-07-23",
   },
   // Pantry
   {
@@ -134,5 +154,7 @@ export const products: Product[] = [
     imageUrl: "https://placehold.co/300x300.png",
     category: "Pantry",
     hint: "olive oil",
+    vendor: "Mediterranean Gold",
+    date: "2025-01-01",
   },
 ];
