@@ -9,9 +9,6 @@ import {
   useCallback,
 } from "react";
 import type { Product } from "@/lib/data";
-import { useAuth } from "./use-auth";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, onSnapshot, getDocs, collection, writeBatch, query, where } from "firebase/firestore";
 
 export interface CartItem extends Product {
   quantity: number;
@@ -29,110 +26,29 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [localCart, setLocalCart] = useState<CartItem[]>([]);
 
-  // Effect to load cart from local storage initially for guests
   useEffect(() => {
+    setLoading(true);
     try {
       const storedCart = localStorage.getItem("cart");
       if (storedCart) {
-        setLocalCart(JSON.parse(storedCart));
+        setCart(JSON.parse(storedCart));
       }
     } catch (error) {
       console.error("Failed to parse cart from local storage", error);
-      setLocalCart([]);
+      setCart([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  // Effect to handle cart state based on auth status
   useEffect(() => {
-    if (user) {
-      setLoading(true);
-      const cartRef = doc(db, "carts", user.uid);
-      const unsubscribe = onSnapshot(
-        cartRef,
-        async (docSnap) => {
-          if (docSnap.exists()) {
-            const firestoreCartItems = docSnap.data().items || [];
-            
-            const productIds = firestoreCartItems.map((item: { id: string, quantity: number }) => item.id);
-            let productsData: Product[] = [];
-
-            if (productIds.length > 0) {
-              const productsRef = collection(db, "products");
-              const q = query(productsRef, where("__name__", "in", productIds));
-              const querySnapshot = await getDocs(q);
-              productsData = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
-            }
-
-            const firestoreCart = firestoreCartItems.map((item: { id: string, quantity: number }) => {
-              const productData = productsData.find(p => p.id === item.id);
-              return { ...productData, ...item };
-            });
-
-            // Merge local cart with Firestore cart on login
-            if (localCart.length > 0) {
-              const mergedCart = [...firestoreCart];
-              localCart.forEach((localItem) => {
-                const existingItemIndex = mergedCart.findIndex(
-                  (item) => item.id === localItem.id
-                );
-                if (existingItemIndex !== -1) {
-                  mergedCart[existingItemIndex].quantity += localItem.quantity;
-                } else {
-                  mergedCart.push(localItem);
-                }
-              });
-              setCart(mergedCart);
-              const itemsToStore = mergedCart.map(({id, quantity}) => ({id, quantity}))
-              await setDoc(cartRef, { items: itemsToStore }, { merge: true });
-              setLocalCart([]); // Clear local cart after merging
-              localStorage.removeItem("cart");
-            } else {
-              setCart(firestoreCart);
-            }
-          } else if (localCart.length > 0) {
-            // New user with a local cart
-            setCart(localCart);
-            const itemsToStore = localCart.map(({id, quantity}) => ({id, quantity}))
-            await setDoc(cartRef, { items: itemsToStore });
-            setLocalCart([]);
-            localStorage.removeItem("cart");
-          } else {
-            setCart([]);
-          }
-          setLoading(false);
-        },
-        (error) => {
-          console.error("Firestore snapshot error:", error);
-          setLoading(false);
-        }
-      );
-
-      return () => unsubscribe();
-    } else {
-      // User is logged out, use local cart
-      setCart(localCart);
+    if (!loading) {
+      localStorage.setItem("cart", JSON.stringify(cart));
     }
-  }, [user]);
-
-  // Effect to update Firestore or Local Storage when cart changes
-  useEffect(() => {
-    const updateDataSource = async () => {
-       if (user && !loading) {
-        const cartRef = doc(db, "carts", user.uid);
-        const itemsToStore = cart.map(({id, quantity}) => ({id, quantity}));
-        await setDoc(cartRef, { items: itemsToStore });
-      } else if (!user) {
-        localStorage.setItem("cart", JSON.stringify(cart));
-      }
-    };
-    updateDataSource();
-  }, [cart, user, loading]);
+  }, [cart, loading]);
 
   const addToCart = useCallback((product: Product) => {
     setCart((prevCart) => {

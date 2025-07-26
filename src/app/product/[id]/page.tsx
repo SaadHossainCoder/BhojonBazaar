@@ -3,7 +3,8 @@
 
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { Star, ShoppingCart, MapPin, Loader2 } from "lucide-react";
+import { Star, ShoppingCart, MapPin } from "lucide-react";
+import { products } from "@/lib/data";
 import type { Product, Feedback } from "@/lib/data";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -21,62 +22,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const id = params.id as string;
+  const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const { toast } = useToast();
   
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const [feedback, setFeedback] = useState<Feedback[]>([]);
+  const [feedback, setFeedback] = useState<Feedback[]>(product?.feedback || []);
   const [reviewName, setReviewName] = useState("");
   const [reviewRating, setReviewRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewComment, setReviewComment] = useState("");
-
-  useEffect(() => {
-    if (!id) return;
-    const fetchProduct = async () => {
-      setLoading(true);
-      try {
-        const productRef = doc(db, 'products', id);
-        const productSnap = await getDoc(productRef);
-        if (productSnap.exists()) {
-          const productData = { ...productSnap.data(), id: productSnap.id } as Product;
-          setProduct(productData);
-          setFeedback(productData.feedback || []);
-        } else {
-          console.log("No such document!");
-        }
-      } catch (error) {
-        console.error("Error fetching product:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
-
-
-  if (loading) {
-     return (
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-grow container mx-auto px-4 py-8">
-           <ProductPageSkeleton />
-        </main>
-      </div>
-    );
-  }
 
   if (!product) {
     return (
@@ -97,9 +57,9 @@ export default function ProductDetailPage() {
     });
   };
 
-  const handleReviewSubmit = async (e: React.FormEvent) => {
+  const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-     if (reviewRating === 0) {
+    if (reviewRating === 0) {
       toast({
         variant: "destructive",
         title: "Rating required",
@@ -107,35 +67,23 @@ export default function ProductDetailPage() {
       });
       return;
     }
-
     const newFeedback: Feedback = {
       author: reviewName,
       rating: reviewRating,
       comment: reviewComment,
     };
-
-    try {
-      const productRef = doc(db, 'products', id);
-      await updateDoc(productRef, {
-        feedback: arrayUnion(newFeedback)
-      });
-      setFeedback(prevFeedback => [newFeedback, ...prevFeedback]);
-      toast({
-        title: "Review Submitted",
-        description: "Thank you for your feedback!",
-      });
-      setReviewName("");
-      setReviewRating(0);
-      setReviewComment("");
-      (e.target as HTMLFormElement).reset();
-    } catch (error) {
-       console.error("Error submitting review:", error);
-       toast({
-        variant: "destructive",
-        title: "Submission failed",
-        description: "Could not submit your review. Please try again.",
-      });
-    }
+    // In a real app, you'd save this to a database.
+    // For now, we'll just add it to the local state.
+    setFeedback([newFeedback, ...feedback]);
+    toast({
+      title: "Review Submitted",
+      description: "Thank you for your feedback!",
+    });
+    // Clear the form
+    setReviewName("");
+    setReviewRating(0);
+    setReviewComment("");
+    (e.target as HTMLFormElement).reset();
   };
 
   return (
@@ -324,25 +272,3 @@ export default function ProductDetailPage() {
     </div>
   );
 }
-
-
-const ProductPageSkeleton = () => (
-  <div className="grid md:grid-cols-2 gap-12">
-    <div>
-      <Skeleton className="w-full aspect-square rounded-lg" />
-    </div>
-    <div className="space-y-6">
-      <Skeleton className="h-10 w-3/4" />
-      <Skeleton className="h-6 w-1/4" />
-      <Skeleton className="h-8 w-1/2" />
-      <div className="space-y-4">
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-5/6" />
-      </div>
-      <Skeleton className="h-12 w-40" />
-      <Skeleton className="h-32 w-full" />
-    </div>
-  </div>
-);
-

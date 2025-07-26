@@ -7,36 +7,26 @@ import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { products } from '@/lib/data';
 import type { Product } from '@/lib/data';
 import {
   analyzePrices,
   type PriceAnalysisOutput,
 } from '@/ai/flows/analyze-prices-flow';
 import { Sparkles, CheckCircle } from 'lucide-react';
-import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
 
 export default function BestPricePage() {
   const [analysis, setAnalysis] = useState<PriceAnalysisOutput | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-     const getAnalysis = async () => {
+    const getAnalysis = async () => {
       try {
         setLoading(true);
         setError(null);
-
-        const productsCollection = collection(db, 'products');
-        const productSnapshot = await getDocs(productsCollection);
-        const productList = productSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
-        setProducts(productList);
-
-        if (productList.length > 0) {
-          const result = await analyzePrices({ products: productList });
-          setAnalysis(result);
-        }
+        const result = await analyzePrices({ products });
+        setAnalysis(result);
       } catch (err) {
         setError('Failed to analyze prices. Please try again later.');
         console.error(err);

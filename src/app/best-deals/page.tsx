@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
-import { vendors, Vendor } from "@/lib/data";
+import { products, vendors, Vendor } from "@/lib/data";
 import type { Product } from "@/lib/data";
 import {
   Accordion,
@@ -15,8 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { MapPin, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
 
 type VendorWithDistance = Vendor & { distance: number };
 
@@ -24,26 +22,6 @@ export default function BestDealsPage() {
   const { toast } = useToast();
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [nearbyVendors, setNearbyVendors] = useState<VendorWithDistance[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoadingProducts(true);
-      try {
-        const productsCollection = collection(db, 'products');
-        const productSnapshot = await getDocs(productsCollection);
-        const productList = productSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
-        setProducts(productList);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoadingProducts(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
 
   // Group products by vendor
   const productsByVendor = products.reduce((acc, product) => {
@@ -159,13 +137,7 @@ export default function BestDealsPage() {
         )}
 
         <Accordion type="multiple" className="w-full">
-          {loadingProducts ? (
-            <div className="text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p>Loading Products...</p>
-            </div>
-          ) : (
-            vendorsToShow.map((vendorName) => {
+          {vendorsToShow.map((vendorName) => {
               const vendorDetails = nearbyVendors.find(v => v.name === vendorName);
               return (
                 <AccordionItem key={vendorName} value={vendorName}>
@@ -189,7 +161,7 @@ export default function BestDealsPage() {
                 </AccordionItem>
               )
             })
-          )}
+          }
         </Accordion>
       </main>
       <footer className="w-full py-6 mt-auto text-center text-muted-foreground text-sm bg-muted">
