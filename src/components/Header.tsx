@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -28,12 +28,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 export default function Header() {
   const { cart } = useCart();
   const { user, signOut } = useAuth();
   const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const pathname = usePathname();
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+
 
   const isAdmin = user && user.email === "admin@bhojonbazaar.com";
 
@@ -47,6 +51,13 @@ export default function Header() {
   if (isAdmin) {
     navLinks.push({ href: "/admin/dashboard", label: "Dashboard" });
   }
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
 
   return (
@@ -97,11 +108,13 @@ export default function Header() {
         </div>
 
         <div className="hidden lg:flex flex-grow max-w-lg">
-          <div className="relative w-full">
+          <form onSubmit={handleSearch} className="relative w-full">
             <Input
               type="search"
               placeholder="I'm shopping for..."
               className="pr-24"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Button
               type="submit"
@@ -109,7 +122,7 @@ export default function Header() {
             >
               Search
             </Button>
-          </div>
+          </form>
         </div>
 
         <div className="flex items-center gap-4">

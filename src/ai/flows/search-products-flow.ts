@@ -34,7 +34,7 @@ const ProductSchema = z.object({
 });
 
 const SearchProductsInputSchema = z.object({
-  query: z.string().describe('The user\'s search query.'),
+  query: z.string().describe("The user's search query."),
   products: z.array(ProductSchema),
 });
 export type SearchProductsInput = z.infer<typeof SearchProductsInputSchema>;
@@ -42,7 +42,9 @@ export type SearchProductsInput = z.infer<typeof SearchProductsInputSchema>;
 const SearchProductsOutputSchema = z.object({
   productIds: z
     .array(z.string())
-    .describe('A list of product IDs that are most relevant to the user\'s search query.'),
+    .describe(
+      "A list of product IDs that are most relevant to the user's search query. If no products match, return an empty array."
+    ),
 });
 export type SearchProductsOutput = z.infer<typeof SearchProductsOutputSchema>;
 
@@ -58,7 +60,7 @@ const prompt = ai.definePrompt({
   output: { schema: SearchProductsOutputSchema },
   prompt: `You are a helpful shopping assistant for an online grocery store. Your task is to find products that match the user's search query. The query might be a product name, a category, or a general description.
 
-Return a list of product IDs that best match the query.
+Return a list of product IDs that best match the query. If no products seem to match, return an empty list.
 
 User Query: "{{query}}"
 
