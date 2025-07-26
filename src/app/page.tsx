@@ -14,10 +14,10 @@ export default function Home() {
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold font-headline text-primary mb-2">
-            Welcome to Street Eats
+            Daily Market Prices
           </h1>
           <p className="text-lg text-muted-foreground">
-            Your guide to the finest street food vendors in town.
+            Your daily source for essential item prices.
           </p>
         </div>
 
@@ -30,7 +30,7 @@ export default function Home() {
         <SubscriptionForm />
       </main>
       <footer className="w-full py-4 text-center text-muted-foreground text-sm">
-        <p>© {new Date().getFullYear()} Street Eats Vendor. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} Daily Market Prices. All Rights Reserved.</p>
       </footer>
     </div>
   );

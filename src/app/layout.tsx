@@ -4,8 +4,8 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Street Eats Vendor",
-  description: "Find the best street food and get price updates.",
+  title: "Daily Market Prices",
+  description: "Daily prices for essential items for vendors.",
 };
 
 export default function RootLayout({

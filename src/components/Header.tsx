@@ -21,7 +21,7 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2 text-primary">
           <Utensils className="w-8 h-8" />
           <span className="text-2xl font-bold font-headline">
-            Street Eats
+            Market Prices
           </span>
         </Link>
         <div className="flex items-center gap-2">

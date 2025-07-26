@@ -15,7 +15,7 @@ import { notifyRelevantSubscribers } from "@/ai/flows/notify-relevant-subscriber
 import type { Vendor } from "@/lib/data";
 
 const formSchema = z.object({
-  vendorId: z.string().min(1, "Please select a vendor."),
+  vendorId: z.string().min(1, "Please select a category."),
   itemId: z.string().min(1, "Please select an item."),
   newPrice: z.coerce.number().min(0.01, "Price must be greater than 0."),
 });
@@ -57,7 +57,7 @@ export default function PriceUpdateForm() {
     const item = vendor?.menu.find(i => i.id === itemId);
 
     if (!vendor || !item) {
-        toast({ variant: 'destructive', title: 'Error', description: 'Selected vendor or item not found.' });
+        toast({ variant: 'destructive', title: 'Error', description: 'Selected category or item not found.' });
         setIsSubmitting(false);
         return;
     }
@@ -67,7 +67,7 @@ export default function PriceUpdateForm() {
     
     toast({
         title: "Price Updated!",
-        description: `The price for ${item.name} is now $${newPrice.toFixed(2)}.`,
+        description: `The price for ${item.name} is now ₹${newPrice.toFixed(2)}.`,
     });
 
     try {
@@ -103,7 +103,7 @@ export default function PriceUpdateForm() {
       <CardHeader>
         <CardTitle className="font-headline text-2xl">Update Prices</CardTitle>
         <CardDescription>
-          Select a vendor and item to update its price.
+          Select a category and item to update its price.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -114,11 +114,11 @@ export default function PriceUpdateForm() {
               name="vendorId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Vendor</FormLabel>
+                  <FormLabel>Category</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a vendor" />
+                        <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -138,7 +138,7 @@ export default function PriceUpdateForm() {
               name="itemId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Food Item</FormLabel>
+                  <FormLabel>Item</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!selectedVendorId}>
                     <FormControl>
                       <SelectTrigger>
@@ -162,9 +162,9 @@ export default function PriceUpdateForm() {
               name="newPrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>New Price</FormLabel>
+                  <FormLabel>New Price (per unit)</FormLabel>
                   <FormControl>
-                    <Input type="number" step="0.01" placeholder="e.g., 5.99" {...field} />
+                    <Input type="number" step="0.01" placeholder="e.g., 35.50" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

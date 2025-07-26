@@ -1,4 +1,4 @@
-import { Sandwich, Soup, Pizza, IceCream, Cookie, UtensilsCrossed } from "lucide-react";
+import { Leaf, Droplet, Flame, ShoppingCart } from "lucide-react";
 import type { ComponentType } from "react";
 
 export interface MenuItem {
@@ -6,6 +6,7 @@ export interface MenuItem {
   name: string;
   price: number;
   icon: ComponentType<{ className?: string }>;
+  unit: string;
 }
 
 export interface Vendor {
@@ -18,38 +19,38 @@ export interface Vendor {
 export const initialVendors: Vendor[] = [
   {
     id: "vendor-1",
-    name: "Mumbai Munchies",
-    description: "Authentic Mumbai street food",
+    name: "Vegetables",
+    description: "Daily prices for fresh vegetables",
     menu: [
-      { id: "item-1-1", name: "Vada Pav", price: 2.5, icon: Sandwich },
-      { id: "item-1-2", name: "Pav Bhaji", price: 5.0, icon: Soup },
-      { id: "item-1-3", name: "Pani Puri", price: 4.0, icon: UtensilsCrossed },
+      { id: "item-1-1", name: "Onion", price: 30, icon: Leaf, unit: "kg" },
+      { id: "item-1-2", name: "Tomato", price: 40, icon: Leaf, unit: "kg" },
+      { id: "item-1-3", name: "Potato", price: 25, icon: Leaf, unit: "kg" },
     ],
   },
   {
     id: "vendor-2",
-    name: "Delhi Delights",
-    description: "Flavorful bites from the heart of Delhi",
+    name: "Masalas",
+    description: "Prices for essential spices",
     menu: [
-      { id: "item-2-1", name: "Chole Bhature", price: 6.0, icon: Soup },
-      { id: "item-2-2", name: "Aloo Tikki", price: 3.5, icon: Cookie },
-      { id: "item-2-3", name: "Kulfi", price: 3.0, icon: IceCream },
+      { id: "item-2-1", name: "Turmeric Powder", price: 200, icon: Flame, unit: "kg" },
+      { id: "item-2-2", name: "Chilli Powder", price: 300, icon: Flame, unit: "kg" },
+      { id: "item-2-3", name: "Coriander Powder", price: 250, icon: Flame, unit: "kg" },
     ],
   },
   {
     id: "vendor-3",
-    name: "Global Bites",
-    description: "International street food favorites",
+    name: "Oils",
+    description: "Prices for cooking oils",
     menu: [
-      { id: "item-3-1", name: "Margherita Pizza", price: 8.0, icon: Pizza },
-      { id: "item-3-2", name: "Classic Burger", price: 7.5, icon: Sandwich },
-      { id: "item-3-3", name: "Chocolate Cookie", price: 2.0, icon: Cookie },
+      { id: "item-3-1", name: "Sunflower Oil", price: 150, icon: Droplet, unit: "litre" },
+      { id: "item-3-2", name: "Mustard Oil", price: 180, icon: Droplet, unit: "litre" },
+      { id: "item-3-3", name: "Groundnut Oil", price: 220, icon: Droplet, unit: "litre" },
     ],
   },
 ];
 
 export const initialSubscribers: string[] = [
-    'subscriber1@example.com',
-    'subscriber2@example.com',
-    'subscriber3@example.com',
+    '9876543210',
+    '8765432109',
+    '7654321098',
 ];

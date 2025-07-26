@@ -32,7 +32,7 @@ export default function DashboardPage() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold font-headline mb-2">Admin Dashboard</h1>
       <p className="text-muted-foreground mb-8">
-        Update food item prices and notify subscribers.
+        Update daily market prices for essential items.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -40,7 +40,7 @@ export default function DashboardPage() {
           <PriceUpdateForm />
         </div>
         <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold font-headline mb-4">Live Vendor Preview</h2>
+            <h2 className="text-2xl font-bold font-headline mb-4">Live Price Preview</h2>
             <div className="grid gap-6 md:grid-cols-1">
                 {vendors.map(vendor => (
                     <VendorCard key={vendor.id} vendor={vendor} />
