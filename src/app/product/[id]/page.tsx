@@ -3,7 +3,7 @@
 
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { Star, ShoppingCart } from "lucide-react";
+import { Star, ShoppingCart, MapPin } from "lucide-react";
 import { products } from "@/lib/data";
 import type { Feedback } from "@/lib/data";
 import Header from "@/components/Header";
@@ -161,6 +161,25 @@ export default function ProductDetailPage() {
               <ShoppingCart className="mr-2" />
               Add to Cart
             </Button>
+            
+            <Card className="mt-8">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <MapPin className="w-5 h-5" />
+                  Delivery Availability
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-2">
+                  <Input placeholder="Enter Pincode" />
+                  <Button variant="outline">Check</Button>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Enter your pincode to see delivery options.
+                </p>
+              </CardContent>
+            </Card>
+
           </div>
         </div>
 
