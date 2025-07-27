@@ -1,8 +1,9 @@
 "use client"
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { useState, useEffect } from "react"
 
-const data = [
+const generateData = () => [
   {
     name: "Jan",
     total: Math.floor(Math.random() * 5000) + 1000,
@@ -54,6 +55,20 @@ const data = [
 ]
 
 export default function Overview() {
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    setData(generateData());
+  }, []);
+
+  if (data.length === 0) {
+    return (
+        <div style={{ width: '100%', height: 350, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <p>Loading chart data...</p>
+        </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data}>
