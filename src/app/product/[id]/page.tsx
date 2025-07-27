@@ -25,6 +25,12 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+export function generateStaticParams() {
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
+
 export default function ProductDetailPage() {
   const params = useParams();
   const id = params.id as string;
